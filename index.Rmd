@@ -265,7 +265,7 @@ germanLines+
 germanLines + 
   geom_smooth(method="glm", family=quasipoisson(link="identity"), 
               fill=NA, aes(color=percent), data=germanyThresh[which(germanyThresh$IDX>0),], lwd=8) +
-  annotate(geom="text", x=0, y=c(0.2,2,4.7), label=c("Tmax", "Tmde", "Tmin"), size=8) +
+  annotate(geom="text", x=0, y=c(0.25,2,4.7), label=c("Tmax", "Tmde", "Tmin"), size=8) +
   annotate(geom="text", x=16.75, y=c(germanIDX$Mmin, germanIDX$Mmax, germanIDX$Mmde), label=c("Mmin", "Mmax", "Mmde"), size=7)
 ```
 
@@ -276,7 +276,7 @@ germanLines +
 ## Slope Changes Systematically Across Thresholds
 <center>
 
-```{r, echo=FALSE, fig.height=7, fig.width=12, cache=FALSE}
+```{r, echo=FALSE, fig.height=7, fig.width=12, cache=TRUE}
 
 germanSlopes <- ggplot(germanyLinearSlopes, aes(x=thresholds)) +
   geom_ribbon(fill="grey50", aes(x=thresholds*100, ymin=Estimate-1.96*germanyLinearSlopes[["Std. Error"]], 
@@ -303,7 +303,7 @@ germanSlopes +
 ---
 ## Comparing Systems
 
-```{r, error=FALSE, echo=FALSE, warning=FALSE, fig.height=7, fig.width=12, cache=FALSE}
+```{r, error=FALSE, echo=FALSE, warning=FALSE, fig.height=7, fig.width=12, cache=TRUE}
 
 ####
 # Now we will look at the entire BIODEPTH dataset
