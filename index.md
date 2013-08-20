@@ -2,7 +2,7 @@
 title       : Measuring the effects of change in biodiversity on multiple ecosystem functions
 subtitle    : Jarrett Byrnes, Lars Gamfeldt, Forest Isbell, Jonathan Lefcheck, John Griffin, Andrew Hector, Bradley Cardinale, David Hooper, Laura Dee, J. Emmett Duffy
 author      : UMass Boston, University of Gothenburg, University of Minnesota, Virginia Institute of Marine Sciences, Swansea University, University of Zurich, University of Michigan, Western Washington University, University of California Santa Barbara, Virginia Institute of Marine Sciences
-job         : http://bit.ly/multifunc
+job         : http://jebyrnes.github.io/intecol-multifunc
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme     : tomorrow      # 
@@ -170,9 +170,7 @@ mode        : selfcontained # {standalone, draft, selfcontained}
 ---
 ## Comparing Systems Behaviour
 <center>
-
 ![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9.png) 
-
 
 </center>
 
