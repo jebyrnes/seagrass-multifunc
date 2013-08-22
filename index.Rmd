@@ -227,7 +227,7 @@ qplot(Diversity, funcMaxed, data=gcPlot, facets=~percent, size=I(3)) +
 ## Slope Changes Systematically Across Thresholds
 
 <center>
-```{r, echo=FALSE, fig.height=6, fig.width=11.2, fig.align='center'}
+```{r, echo=FALSE, fig.height=6, fig.width=12, fig.align='center'}
 germanyLinearSlopes<-getCoefTab(funcMaxed ~ Diversity, data=germanyThresh, coefVar="Diversity", family=quasipoisson(link="identity"))
 
 germanyThresh$percent <- 100*germanyThresh$thresholds
@@ -246,7 +246,7 @@ germanLines <-
     stat_smooth(method="glm", family=quasipoisson(link="identity"),  fill=NA, aes(color=percent), lwd=0.3) +
     theme_bw(base_size=22) +
     scale_color_gradient(name="Percent of \nMaximum", low="blue", high="red")+
-  xlim(c(0,18))
+  xlim(c(-1,18))
 
 germanLines+
   annotate(geom="text", x=0, y=c(0.5,1.5,3.7), label=c("    ", "    ", "    ")) +
@@ -260,7 +260,7 @@ germanLines+
 ## Slope Changes Systematically Across Thresholds
 
 <center>
-```{r, echo=FALSE, fig.height=6, fig.width=11.2, fig.align='center'}
+```{r, echo=FALSE, fig.height=6, fig.width=12, fig.align='center'}
 germanLines + 
   geom_smooth(method="glm", family=quasipoisson(link="identity"), 
               fill=NA, aes(color=percent), data=germanyThresh[which(germanyThresh$IDX>0),], lwd=8) +
@@ -274,7 +274,7 @@ germanLines +
 ## Slope Changes Systematically Across Thresholds
 
 <center>
-```{r, echo=FALSE, fig.height=6, fig.width=11.2, fig.align='center'}
+```{r, echo=FALSE, fig.height=6, fig.width=12, fig.align='center'}
 germanLines + 
   geom_smooth(method="glm", family=quasipoisson(link="identity"), 
               fill=NA, aes(color=percent), data=germanyThresh[which(germanyThresh$IDX>0),], lwd=8) +
