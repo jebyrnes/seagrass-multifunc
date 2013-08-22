@@ -93,7 +93,7 @@ mode        : selfcontained # {standalone, draft, selfcontained}
 
 ---
 
-## Average of Standardized Function
+## Average of Standardized Functions
 
 <center>
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2.png) 
@@ -103,7 +103,7 @@ mode        : selfcontained # {standalone, draft, selfcontained}
 
 ---
 
-## Number of Functions Performing at a _Threshold_
+## Number of Functions Performing at a Threshold
 
 <center>
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3.png) 
@@ -145,11 +145,19 @@ mode        : selfcontained # {standalone, draft, selfcontained}
 </center>
 
 ---
+## Slope Changes Systematically Across Thresholds
 
+<center>
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7.png) 
+
+
+</center>
+
+---
 ## Slope Changes Systematically Across Thresholds
 <center>
 
-![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7.png) 
+![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8.png) 
 
 
 </center>
@@ -164,13 +172,13 @@ mode        : selfcontained # {standalone, draft, selfcontained}
 ---
 ## Comparing Systems
 
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8.png) 
+![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9.png) 
 
 
 ---
 ## Comparing Systems Behaviour
 <center>
-![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9.png) 
+![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10.png) 
 
 </center>
 
@@ -180,7 +188,7 @@ mode        : selfcontained # {standalone, draft, selfcontained}
 
 <center>
 
-![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10.png) 
+![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11.png) 
 
 
 </center>
