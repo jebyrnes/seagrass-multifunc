@@ -1,14 +1,14 @@
 ---
-title       : Measuring the effects of change in biodiversity on multiple ecosystem functions
+title       : Measuring the effects of environmental change on multiple ecosystem functions
 subtitle    : Jarrett Byrnes, Lars Gamfeldt, Forest Isbell, Jonathan Lefcheck, John Griffin, Andrew Hector, Bradley Cardinale, David Hooper, Laura Dee, J. Emmett Duffy
 author      : UMass Boston, University of Gothenburg, University of Minnesota, Virginia Institute of Marine Sciences, Swansea University, University of Zurich, University of Michigan, Western Washington University, University of California Santa Barbara, Virginia Institute of Marine Sciences
-job         : http://jebyrnes.github.io/intecol-multifunc
+job         : http://jebyrnes.github.io/seagrass-multifunc
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme     : tomorrow      # 
 widgets     : []            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft, selfcontained}
----bg:url(./images/JenaExperiment_.jpg) 
+---bg:url(./images/griffin_crabs.jpg) 
 
 
 ```{r, warning=FALSE, results="hide", message=FALSE, error=FALSE, echo=FALSE}
@@ -18,43 +18,35 @@ library(multifunc)
 library(ggplot2)
 library(gridExtra)
 
-#Read in data  to run sample analyses on the biodepth data
-data(all_biodepth)
-
-allVars<-qw(biomassY3, root3, N.g.m2,  light3, N.Soil, wood3, cotton3)
-varIdx<-which(names(all_biodepth) %in% allVars)
-
-#######
-#Now, specify what data we're working with - Germany
-#and the relevant variables we'll be working with
-#######
-germany<-subset(all_biodepth, all_biodepth$location=="Germany")
-
-
-vars<-whichVars(germany, allVars)
-species<-relevantSp(germany,26:ncol(germany))
-spIDX <- which(names(germany) %in% species) #in case we need these
+#Read in data  to run sample analyses on the duffy 2003 data
+data(duffy_2003)
+#load("./duffy_2003.rda")
+duffy_2003 <- subset(duffy_2003, duffy_2003$diversity !=0)
+vars<-qw(grazer_mass, tot_algae_mass, Zost_change_mass, botryllus_biomass, taxon_richness, sediment_C)
+varIdx<-which(names(duffy_2003) %in% vars)
 
 #######
-#Now, specify what data we're working with - Germany
-#and the relevant variables we'll be working with
+#Get the relevant variables we'll be working with
 #######
-germany<-subset(all_biodepth, all_biodepth$location=="Germany")
-germany$N.Soil<- -1*germany$N.Soil +max(germany$N.Soil, na.rm=T)
 
 
-vars<-whichVars(germany, allVars)
-species<-relevantSp(germany,26:ncol(germany))
-spIDX <- which(names(germany) %in% species) #in case we need these
+species<-relevantSp(duffy_2003,20:ncol(duffy_2003))
+spIDX <- which(names(duffy_2003) %in% species) #in case we need these
+
+
+#Reflect the relevant variables
+duffy_2003$taxon_richness <- -1*duffy_2003$taxon_richness + max(duffy_2003$taxon_richness)
+duffy_2003$tot_algae_mass <- -1*duffy_2003$tot_algae_mass + max(duffy_2003$tot_algae_mass)
+
 ```
-
+<div style="background-color:white; color:black;  margin-width:10px; font-size:18px; position:absolute; left: 0; bottom:0">Griffin et al. 2008 Ecology</div>
 
 ---
 
 ## Meta-analysis Trio: Diversity Affects Function
 
 <table height=100% width=100%><tr>
-  <td><img src="./people/troika.jpg"><br>
+  <td><img src="./images/troika.jpg"><br>
   </td>
   <td><br /><img src="./images/balvanera_et_al.jpg"><br>Balvanera et al. 2006 Eco. Let.</td>
 </tr></table>
@@ -64,16 +56,16 @@ spIDX <- which(names(germany) %in% species) #in case we need these
 ## But Are Only Two Species Needed?
 
 <table height=100% width=100%><tr>
-  <td><img src="./people/cardinale_algae_2.jpg"><br>Cardinale et al. 2006
+  <td><img src="./images/cardinale_algae_2.jpg"><br>Cardinale et al. 2006
   </td>
   <td><br /><img src="./images/cardinale_et_al_saturation.jpg"><br>Balvanera et al. 2006 Eco. Let.</td>
 </tr></table>
 
 ---bg:url(./images/amphipods.jpg) 
 
-<div class="build"><center><img src="./images/duffy_2003.jpg", class="build"></center>
+<div class="build"><center><img src="./images/duffy_2003.jpg", class="build"></center></div>
 
-<div style="background-color:grey; color:black; width:220px; margin-width:4px;">Duffy et al. 2003 Ecology Letters</div></div>
+<div style="background-color:grey; color:black; width:220px; margin-width:4px;">Duffy et al. 2003 Ecology Letters</div>
 
 ---
 
@@ -89,50 +81,39 @@ spIDX <- which(names(germany) %in% species) #in case we need these
 > 3. Future Explorations of BEMF
 
 
----
+---bg:url(./images/amphipods.jpg) 
+## An Example: Duffy et al. 2003 Ecology Letters 
 
-## An Example: Biodepth 
 <center>
+```{r functions, echo=FALSE, fig.width=12, fig.height=7.5}
+source("~/Dropbox/src/floating_pie/pieDivPlot.R")
 
-<center><img src="./images/biodepth.jpg", class="build"></center>
+#make an aggregated daat set for plotting
+duffy_2003ForPlotting2<-melt(duffy_2003[,c(5,spIDX, varIdx)], id.vars=c("diversity", species))
+levels(duffy_2003ForPlotting2$variable) <- c('Sediment organic C', 'Eelgrass Biomass Change', 'Reflected Algal Mass', 'Grazer Biomass', 'Botryllus Biomass', 'Reflected Benthic Diversity')
 
-</center>
+duffy_2003ForPlottingSum <- ddply(duffy_2003ForPlotting2, 
+                                  c("variable", "diversity", species),
+                                  summarise, mean_value=mean(value), 
+                                  se_value =sd(value)/sqrt(length(value)) )
 
-
----
-
-## Functions Measured in Germany
-<center>
-```{r functions, echo=FALSE, fig.width=12, fig.height=6}
-germanyForPlotting<-melt(germany[,c(8,which(names(germany) %in% vars))], id.vars="Diversity")
-germanyForPlotting$variable <- factor(germanyForPlotting$variable)
-
-#make the levels of the functions into something nice for plots
-levels(germanyForPlotting$variable) <- c('Aboveground Biomass', 'Root Biomass', 'Cotton Decomposition', 'Soil Nitrogen', 'Plant Nitrogen')
-
-germanyFits <- dlply(germanyForPlotting, .(variable), function(x) lm(value ~ Diversity, data=x))
-
-germanyLabels <- data.frame(variable = levels(germanyForPlotting$variable), 
-                            Diversity=7, value=c(2000, 1200, 1.5, 6, 20), 
-                            lab=paste(letters[1:5], ")", sep=""),
-                            r2 = sapply(germanyFits, function(x) summary(x)$r.squared),
-                            p = sapply(germanyFits, function(x) anova(x)[1,5])
-                            )
+duffy_2003ForPlottingSum$se_value[which(is.na(duffy_2003ForPlottingSum$se_value))] <- 0
 
 
-german_functions <- ggplot(aes(x=Diversity, y=value),data=germanyForPlotting) +
-  geom_point(size=4)+
-  facet_wrap(~variable, scales="free") +
-  theme_bw(base_size=20)+
-  stat_smooth(method="lm", colour="black", size=2) + 
-  xlab("\nSpecies Richness") +
-  ylab("Value of Function\n") +
- theme(panel.grid = element_blank())
-
-german_functions
-
+#plot each function
+par(mfrow=c(2,3), mar=c(4.5, 5, 3, 2) + 0.1, bg="white")
+for(avar in levels(duffy_2003ForPlottingSum$variable)){
+  plotMe <- duffy_2003ForPlottingSum[which(duffy_2003ForPlottingSum$variable==avar),]
+  yminmax <- c(min(plotMe$mean_value-plotMe$se_value)-0.03, max(plotMe$mean_value+plotMe$se_value)+0.03)
+  pieDivPlot(diversity, mean_value, 3:8, se_value, 
+             data = plotMe, ylim=yminmax,
+             cex.axis = 1.8, cex.lab = 1.8, radius = 0.1, jitterAmount = 0.3, ylab=avar, xlab="Grazer Species Richness")
+  abline(lm(value ~ diversity, data=subset(duffy_2003ForPlotting2, duffy_2003ForPlotting2$variable==avar)), col="red", lty=2, lwd=2)
+}
+par(mfrow=c(1,1))
 ```
-</center>
+<div style="text-align: left; font-size:26px;font-color:red"><a href="https://github.com/jebyrnes/pieDivPlots">https://github.com/jebyrnes/pieDivPlots</a></div>
+
 
 ---
 
@@ -147,7 +128,7 @@ german_functions
 
 <center>
 ```{r overlap, echo=FALSE, warning=FALSE, fig.height=6, fig.width=10}
-redund<-getRedundancy(vars, species, germany)
+redund<-getRedundancy(vars, species, duffy_2003)
 posCurve<-divNeeded(redund, type="positive")
 posCurve$div<-posCurve$div/ncol(redund)
 pc<-qplot(nfunc, div, data=posCurve, group=nfunc,  alpha=I(0))+
@@ -167,15 +148,28 @@ pc
 
 <center>
 ```{r, echo=FALSE, warning=FALSE, fig.height=6, fig.width=10}
-germany<-cbind(germany, getStdAndMeanFunctions(germany, vars))
-ggplot(aes(x=Diversity, y=meanFunction),data=germany)+geom_point(size=3)+
-  theme_bw(base_size=15)+
-  stat_smooth(method="lm", colour="black", size=2) + 
-  xlab("\nSpecies Richness") +
-  ylab("Average Value of Standardized Functions\n")
+duffy_2003<-cbind(duffy_2003, getStdAndMeanFunctions(duffy_2003, vars))
+# ggplot(aes(x=diversity, y=meanFunction),data=duffy_2003)+geom_point(size=3)+
+#   theme_bw(base_size=15)+
+#   stat_smooth(method="lm", colour="black", size=2) + 
+#   xlab("\nSpecies Richness") +
+#   ylab("Average Value of Standardized Functions\n")
+source("~/Dropbox/src/floating_pie/pieDivPlot.R")
+
+
+set.seed(2002)
+par(mar=c(5,5,4,4))
+pieDivPlot(diversity, meanFunction, 20:25, 
+            data = duffy_2003, ylim=c(0.2,0.8),
+           cex.axis = 1.8, cex.lab = 1.8, radius = 0.07, jitterAmount = 0.3, 
+           ylab="Average Value of Standardized Functions", xlab="Grazer Species Richness" )
+
+abline(lm(meanFunction ~ diversity, data=duffy_2003), col="red", lty=2, lwd=3)
+
+
 ```
 </center>
-<div class="build"><center><font color='red'>Many results lead to the same line</font></center></div>
+<div class="build"><center><font color='red'>Many results lead to the same line</font></center></div></div>
 
 ---
 
@@ -183,17 +177,25 @@ ggplot(aes(x=Diversity, y=meanFunction),data=germany)+geom_point(size=3)+
 
 <center>
 ```{r, echo=FALSE, warning=FALSE, fig.height=6, fig.width=10}
-germanyThresh<-getFuncsMaxed(germany, vars, threshmin=0.05, threshmax=0.99, prepend=c("plot","Diversity"), maxN=7)
+duffy_2003Thresh<-getFuncsMaxed(duffy_2003, vars, threshmin=0.05, threshmax=0.99, prepend=c("tank","diversity", species), maxN=7)
 
-gcPlot<-subset(germanyThresh, germanyThresh$thresholds==0.8) 
+gcPlot<-subset(duffy_2003Thresh, duffy_2003Thresh$thresholds==0.8) 
 
 gcPlot$percent<-paste(100*gcPlot$thresholds, "%", sep="")
 
-qplot(Diversity, funcMaxed, data=gcPlot, size=I(3)) +
+qplot(diversity, funcMaxed, data=gcPlot, size=I(3)) +
   stat_smooth(method="glm", family=quasipoisson(link="identity"), colour="red", lwd=1.2) +
   ylab(expression("Number of Functions" >= Threshold)) +
   xlab("Species Richness") +
-  theme_bw(base_size=22) 
+  theme_bw(base_size=22) + geom_jitter(position = position_jitter(width = .1, height=0), size=3)
+# 
+# set.seed(2013)
+# pieDivPlot(diversity, funcMaxed, 4:9, 
+#             data = gcPlot, ylim=c(0,6),
+#            cex.axis = 1.8, cex.lab = 1.8, radius = 0.07, jitterAmount = 0.3, 
+#            ylab=expression("Number of Functions" >= Threshold), xlab="Grazer Species Richness" )
+# abline(lm(funcMaxed ~ diversity, data=gcPlot), col="red", lty=2, lwd=3)
+# 
 
 ```
 </center>
@@ -210,15 +212,15 @@ qplot(Diversity, funcMaxed, data=gcPlot, size=I(3)) +
 <center>
 ```{r, echo=FALSE}
 
-gcPlot<-subset(germanyThresh, germanyThresh$thresholds %in% qw(0.2, 0.4, 0.6, 0.8)) #note, using qw as %in% is a string comparison operator
+gcPlot<-subset(duffy_2003Thresh, duffy_2003Thresh$thresholds %in% qw(0.2, 0.4, 0.6, 0.8)) #note, using qw as %in% is a string comparison operator
 
 gcPlot$percent<-paste(100*gcPlot$thresholds, "%", sep="")
 
-qplot(Diversity, funcMaxed, data=gcPlot, facets=~percent, size=I(3)) +
+qplot(diversity, funcMaxed, data=gcPlot, facets=~percent, size=I(3)) +
   stat_smooth(method="glm", family=quasipoisson(link="identity"), colour="red", lwd=1.2) +
   ylab(expression("Number of Functions" >= Threshold)) +
-  xlab("Species Richness") +
-  theme_bw(base_size=22) 
+  xlab("Grazer Species Richness") +
+  theme_bw(base_size=22)  + geom_jitter(position = position_jitter(width = .1, height=0), size=3)
 ```
 </center>
 
@@ -227,30 +229,30 @@ qplot(Diversity, funcMaxed, data=gcPlot, facets=~percent, size=I(3)) +
 ## Slope Changes Systematically Across Thresholds
 
 <center>
-```{r, echo=FALSE, fig.height=6, fig.width=12, fig.align='center'}
-germanyLinearSlopes<-getCoefTab(funcMaxed ~ Diversity, data=germanyThresh, coefVar="Diversity", family=quasipoisson(link="identity"))
+```{r, echo=FALSE, fig.height=6, fig.width=10, fig.align='center'}
+duffy_2003LinearSlopes<-getCoefTab(funcMaxed ~ diversity, data=duffy_2003Thresh, coefVar="diversity", family=quasipoisson(link="identity"))
 
-germanyThresh$percent <- 100*germanyThresh$thresholds
+duffy_2003Thresh$percent <- 100*duffy_2003Thresh$thresholds
 
-germanIDX <- getIndices(germanyLinearSlopes, germanyThresh, funcMaxed ~ Diversity)
+duffyIDX <- getIndices(duffy_2003LinearSlopes, duffy_2003Thresh, funcMaxed ~ diversity, divvar="diversity")
 
-germanyThresh$IDX <- 0
-germanyThresh$IDX [which(germanyThresh$thresholds %in% 
-                           c(germanIDX$Tmin, germanIDX$Tmax, germanIDX$Tmde))] <- 1
+duffy_2003Thresh$IDX <- 0
+duffy_2003Thresh$IDX [which(duffy_2003Thresh$thresholds %in% 
+                           c(duffyIDX$Tmin, duffyIDX$Tmax, duffyIDX$Tmde))] <- 1
 
 
-germanLines <- 
-  ggplot(data=germanyThresh, aes(x=Diversity, y=funcMaxed, group=percent)) +
+duffyLines <- 
+  ggplot(data=duffy_2003Thresh, aes(x=diversity, y=funcMaxed, group=percent)) +
     ylab(expression("Number of Functions" >= Threshold)) +
     xlab("Species Richness") +
     stat_smooth(method="glm", family=quasipoisson(link="identity"),  fill=NA, aes(color=percent), lwd=0.3) +
     theme_bw(base_size=22) +
     scale_color_gradient(name="Percent of \nMaximum", low="blue", high="red")+
-  xlim(c(-1,18))
+  xlim(c(0.3,6.7))
 
-germanLines+
-  annotate(geom="text", x=0, y=c(0.5,1.5,3.7), label=c("    ", "    ", "    ")) +
-  annotate(geom="text", x=16.85, y=c(germanIDX$Mmin, germanIDX$Mmax, germanIDX$Mmde), label=c("   ", "    ", "    "))
+duffyLines+
+  annotate(geom="text", x=0.5, y=c(0.5,1.5,3.7), label=c("    ", "    ", "    ")) +
+  annotate(geom="text", x=6.5, y=c(duffyIDX$Mmin, duffyIDX$Mmax, duffyIDX$Mmde), label=c("   ", "    ", "    "))
 ```   
 
 </center>
@@ -260,12 +262,12 @@ germanLines+
 ## Slope Changes Systematically Across Thresholds
 
 <center>
-```{r, echo=FALSE, fig.height=6, fig.width=12, fig.align='center'}
-germanLines + 
+```{r, echo=FALSE, fig.height=6, fig.width=10, fig.align='center'}
+duffyLines + 
   geom_smooth(method="glm", family=quasipoisson(link="identity"), 
-              fill=NA, aes(color=percent), data=germanyThresh[which(germanyThresh$IDX>0),], lwd=8) +
-  annotate(geom="text", x=0, y=c(0.25,2,4.7), label=c("Tmax", "Tmde", "Tmin"), size=8) +
-  annotate(geom="text", x=16.85, y=c(germanIDX$Mmin, germanIDX$Mmax, germanIDX$Mmde), label=c("    ", "    ", "    "), size=7)
+              fill=NA, aes(color=percent), data=duffy_2003Thresh[which(duffy_2003Thresh$IDX>0),], lwd=8) +
+  annotate(geom="text", x=0.5, y=c(1,2,4.2), label=c("Tmax", "Tmde", "Tmin"), size=7) +
+  annotate(geom="text", x=6.5, y=c(duffyIDX$Mmin, duffyIDX$Mmax, duffyIDX$Mmde), label=c("    ", "    ", "    "), size=7)
 ```
 
 </center>
@@ -274,12 +276,12 @@ germanLines +
 ## Slope Changes Systematically Across Thresholds
 
 <center>
-```{r, echo=FALSE, fig.height=6, fig.width=12, fig.align='center'}
-germanLines + 
+```{r, echo=FALSE, fig.height=6, fig.width=10, fig.align='center'}
+duffyLines + 
   geom_smooth(method="glm", family=quasipoisson(link="identity"), 
-              fill=NA, aes(color=percent), data=germanyThresh[which(germanyThresh$IDX>0),], lwd=8) +
-  annotate(geom="text", x=0, y=c(0.25,2,4.7), label=c("Tmax", "Tmde", "Tmin"), size=8) +
-  annotate(geom="text", x=16.85, y=c(germanIDX$Mmin, germanIDX$Mmax, germanIDX$Mmde), label=c("Mmin", "Mmax", "Mmde"), size=7)
+              fill=NA, aes(color=percent), data=duffy_2003Thresh[which(duffy_2003Thresh$IDX>0),], lwd=8) +
+  annotate(geom="text", x=0.5, y=c(1,2,4.2), label=c("Tmax", "Tmde", "Tmin"), size=7) +
+  annotate(geom="text", x=6.5, y=c(duffyIDX$Mmin, duffyIDX$Mmax, duffyIDX$Mmde), label=c("Mmin", "Mmax", "Mmde"), size=7)
 ```
 
 </center>
@@ -288,19 +290,18 @@ germanLines +
 ## Slope Changes Systematically Across Thresholds
 <center>
 
-```{r, echo=FALSE, fig.height=7, fig.width=12, cache=TRUE}
+```{r duffyslopechange, echo=FALSE, fig.height=7, fig.width=10, cache=FALSE}
 
-germanSlopes <- ggplot(germanyLinearSlopes, aes(x=thresholds*100)) +
-  geom_ribbon(fill="grey50", aes(x=thresholds*100, ymin=Estimate-1.96*germanyLinearSlopes[["Std. Error"]], 
-                                  ymax=Estimate+1.96*germanyLinearSlopes[["Std. Error"]])) +
+duffySlopes <- ggplot(duffy_2003LinearSlopes, aes(x=thresholds*100)) +
+  geom_ribbon(fill="grey50", aes(x=thresholds*100, ymin=Estimate-1.96*duffy_2003LinearSlopes[["Std. Error"]], ymax=Estimate+1.96*duffy_2003LinearSlopes[["Std. Error"]])) +
   geom_point(aes(x=thresholds*100, y=Estimate)) +
   ylab("Change in Number of Function\n per Addition of 1 Species\n") +
   xlab("\nThreshold (%)") +
   stat_abline(intercept=0, slope=0, lwd=1, linetype=2) +
   theme_bw(base_size=22)
 
-germanSlopes + 
-  annotate(geom="text", y=c(-0.02, -0.02, -0.02, germanIDX$Rmde.linear+0.02), x=c(germanIDX$Tmin*100, germanIDX$Tmde*100, germanIDX$Tmax*100, germanIDX$Tmde*100),  label=c("Tmin", "Tmde", "Tmax", "Rmde"), color="black", size=8) 
+duffySlopes + 
+  annotate(geom="text", y=c(-0.04, -0.04, -0.04, duffyIDX$Rmde.linear+0.05), x=c(duffyIDX$Tmin*100, duffyIDX$Tmde*100, duffyIDX$Tmax*100, duffyIDX$Tmde*100),  label=c("Tmin", "Tmde", "Tmax", "Rmde"), color="black", size=8) 
 ```
 
 </center>
@@ -311,11 +312,19 @@ germanSlopes +
 2. At the Threshold of a Solution
 3. <font color="red">Future Explorations of BEMF</font>
 
+---
+
+## Comparing Systems: Biodepth 
+<center>
+
+<center><img src="./images/biodepth.jpg", class="build"></center>
+
+</center>
 
 ---
 ## Comparing Systems
 
-```{r, error=FALSE, echo=FALSE, warning=FALSE, fig.height=7, fig.width=12, cache=TRUE}
+```{r, error=FALSE, echo=FALSE, warning=FALSE, fig.height=7, fig.width=12, cache=FALSE}
 
 ####
 # Now we will look at the entire BIODEPTH dataset
@@ -324,10 +333,11 @@ germanSlopes +
 # If you're not using plyr for your data aggregation, you should be.  http://plyr.had.co.nz/
 # It will save you a lot of time and headaches in the future.
 ####
+data(all_biodepth)
 
 #Read in data  to run sample analyses on the biodepth data
 allVars<-qw(biomassY3, root3, N.g.m2,  light3, N.Soil, wood3, cotton3)
-varIdx<-which(names(sub_biodepth) %in% allVars)
+varIdx<-which(names(all_biodepth) %in% allVars)
 
 
 
@@ -394,16 +404,16 @@ ggplot(data=bdLinearSlopes, aes(x=thresholds, y=Estimate)) +
 ## Comparing Systems Behaviour
 <center>
 ```{r, echo=FALSE, fig.height=7, fig.width=12}
-qplot(Tmax, Mmax/nFunc*100, size=Rmde.linear, 
-      data=indexTable, geom="point", color=Tmde) + 
-  geom_text(data=indexTable, aes(x=Tmax-2, y=100*Mmax/nFunc+4, label=location), size=I(5)) +
- # scale_color_discrete(guide=FALSE) +
-  theme_bw(base_size=24) +
-  xlab("\nHighest Threshold with a Diversity Effect") +
-  ylab("Percentage of Functions Maximized\n") +
-  scale_size_continuous("Slope of Strongest Observed\nDiversity Effect") +
-  xlim(c(40,100)) +
-  ylim(c(0,110))
+ qplot(Tmax, Mmax/nFunc*100, size=Rmde.linear, 
+       data=indexTable, geom="point", color=Tmde) + 
+   geom_text(data=indexTable, aes(x=Tmax-2, y=100*Mmax/nFunc+4, label=indexTable$location), size=I(5)) +
+  # scale_color_discrete(guide=FALSE) +
+   theme_bw(base_size=24) +
+   xlab("\nHighest Threshold with a Diversity Effect") +
+   ylab("Percentage of Functions Maximized\n") +
+   scale_size_continuous("Slope of Strongest Observed\nDiversity Effect") +
+   xlim(c(40,100)) +
+   ylim(c(0,110))
 
 ```
 </center>
@@ -468,6 +478,8 @@ ggplot(indexSummary, aes(x=metric, y=Mean, ymin=lower.CI, ymax=upper.CI)) +
 Paper: [http://bit.ly/multifunc](http://bit.ly/multifunc) 
 <br>
 R Multifunc Library: [https://github.com/jebyrnes/multifunc](https://github.com/jebyrnes/multifunc)
+<br />
+Pie Diversity Plots: [https://github.com/jebyrnes/pieDivPlots](https://github.com/jebyrnes/pieDivPlots)
 <br>
 ![nceas](./images/nceas-logo.jpg)
 ![nsf](./images/nsf-logo.jpg)

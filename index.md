@@ -2,25 +2,25 @@
 title       : Measuring the effects of change in biodiversity on multiple ecosystem functions
 subtitle    : Jarrett Byrnes, Lars Gamfeldt, Forest Isbell, Jonathan Lefcheck, John Griffin, Andrew Hector, Bradley Cardinale, David Hooper, Laura Dee, J. Emmett Duffy
 author      : UMass Boston, University of Gothenburg, University of Minnesota, Virginia Institute of Marine Sciences, Swansea University, University of Zurich, University of Michigan, Western Washington University, University of California Santa Barbara, Virginia Institute of Marine Sciences
-job         : http://jebyrnes.github.io/intecol-multifunc
+job         : http://jebyrnes.github.io/seagrass-multifunc
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme     : tomorrow      # 
 widgets     : []            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft, selfcontained}
----bg:url(./images/JenaExperiment_.jpg) 
+---bg:url(./images/griffin_crabs.jpg) 
 
 
 
 
-
+<div style="color:black; width:400px; margin-width:4px; font-size:15px; position:absolute;   left: 0; bottom:100%">Griffin et al. 2008 Ecology</div>
 
 ---
 
 ## Meta-analysis Trio: Diversity Affects Function
 
 <table height=100% width=100%><tr>
-  <td><img src="./people/troika.jpg"><br>
+  <td><img src="./images/troika.jpg"><br>
   </td>
   <td><br /><img src="./images/balvanera_et_al.jpg"><br>Balvanera et al. 2006 Eco. Let.</td>
 </tr></table>
@@ -30,16 +30,16 @@ mode        : selfcontained # {standalone, draft, selfcontained}
 ## But Are Only Two Species Needed?
 
 <table height=100% width=100%><tr>
-  <td><img src="./people/cardinale_algae_2.jpg"><br>Cardinale et al. 2006
+  <td><img src="./images/cardinale_algae_2.jpg"><br>Cardinale et al. 2006
   </td>
   <td><br /><img src="./images/cardinale_et_al_saturation.jpg"><br>Balvanera et al. 2006 Eco. Let.</td>
 </tr></table>
 
 ---bg:url(./images/amphipods.jpg) 
 
-<div class="build"><center><img src="./images/duffy_2003.jpg", class="build"></center>
+<div class="build"><center><img src="./images/duffy_2003.jpg", class="build"></center></div>
 
-<div style="background-color:grey; color:black; width:220px; margin-width:4px;">Duffy et al. 2003 Ecology Letters</div></div>
+<div style="background-color:grey; color:black; width:220px; margin-width:4px;">Duffy et al. 2003 Ecology Letters</div>
 
 ---
 
@@ -55,23 +55,14 @@ mode        : selfcontained # {standalone, draft, selfcontained}
 > 3. Future Explorations of BEMF
 
 
----
+---bg:url(./images/amphipods.jpg) 
+## An Example: Duffy et al. 2003 Ecology Letters 
 
-## An Example: Biodepth 
-<center>
-
-<center><img src="./images/biodepth.jpg", class="build"></center>
-
-</center>
-
-
----
-
-## Functions Measured in Germany
 <center>
 ![plot of chunk functions](figure/functions.png) 
 
-</center>
+<div style="text-align: left; font-size:26px;font-color:red"><a href="https://github.com/jebyrnes/pieDivPlots">https://github.com/jebyrnes/pieDivPlots</a></div>
+
 
 ---
 
@@ -99,7 +90,7 @@ mode        : selfcontained # {standalone, draft, selfcontained}
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2.png) 
 
 </center>
-<div class="build"><center><font color='red'>Many results lead to the same line</font></center></div>
+<div class="build"><center><font color='red'>Many results lead to the same line</font></center></div></div>
 
 ---
 
@@ -157,7 +148,7 @@ mode        : selfcontained # {standalone, draft, selfcontained}
 ## Slope Changes Systematically Across Thresholds
 <center>
 
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8.png) 
+![plot of chunk duffyslopechange](figure/duffyslopechange.png) 
 
 
 </center>
@@ -168,17 +159,25 @@ mode        : selfcontained # {standalone, draft, selfcontained}
 2. At the Threshold of a Solution
 3. <font color="red">Future Explorations of BEMF</font>
 
+---
+
+## Comparing Systems: Biodepth 
+<center>
+
+<center><img src="./images/biodepth.jpg", class="build"></center>
+
+</center>
 
 ---
 ## Comparing Systems
 
-![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9.png) 
+![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8.png) 
 
 
 ---
 ## Comparing Systems Behaviour
 <center>
-![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10.png) 
+![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9.png) 
 
 </center>
 
@@ -188,7 +187,7 @@ mode        : selfcontained # {standalone, draft, selfcontained}
 
 <center>
 
-![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11.png) 
+![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10.png) 
 
 
 </center>
@@ -209,6 +208,7 @@ mode        : selfcontained # {standalone, draft, selfcontained}
 Paper: [http://bit.ly/multifunc](http://bit.ly/multifunc) 
 <br>
 R Multifunc Library: [https://github.com/jebyrnes/multifunc](https://github.com/jebyrnes/multifunc)
+Pie Diversity Plots: [https://github.com/jebyrnes/pieDivPlots](https://github.com/jebyrnes/pieDivPlots)
 <br>
 ![nceas](./images/nceas-logo.jpg)
 ![nsf](./images/nsf-logo.jpg)
